@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  password      String
+  name          String
+  phone         String?
+  profileImage  String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  quotations    Quotation[]
+  consultations Consultation[]
+
+  @@map("users")
+}
+
+model Quotation {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  category    String
+  budget      Float?
+  status      String   @default("pending") // pending, accepted, rejected, completed
+  providerName String?
+  providerContact String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("quotations")
+}
+
+model Consultation {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  category    String
+  status      String   @default("active") // active, completed, cancelled
+  scheduledAt DateTime?
+  duration    Int?     // in minutes
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("consultations")
+} 
