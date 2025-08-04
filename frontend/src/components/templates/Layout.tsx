@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom'
 import { useAuthStore } from '../../stores/authStore'
 import Header from '../organisms/Header'
 import Sidebar from '../organisms/Sidebar'
-import { Menu, X } from 'lucide-react'
+import { X } from 'lucide-react'
 
 const Layout = () => {
   const { user } = useAuthStore()
